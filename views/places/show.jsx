@@ -2,6 +2,25 @@ const React = require('react')
 const Def = require('../default')
 
 function show (data) {
+  let comments = ( 
+    <h3 className="inactive">
+      No comments yet!
+    </h3>
+  )
+  if (data.place.comments.length) {
+    comments = data.place.comments.map(c => {
+      return (
+        <div className="border">
+          <h2 className="rant"> {c.rant ? 'Rant! ' : 'Rave!'} </h2>
+          <h4>{c.content}</h4>
+          <h3>
+            <strong>- {c.author}</strong>
+          </h3>
+          <h4>Rating: {c.stars}</h4>
+        </div>
+      )
+    })
+  }
     return (
         <Def>
           <main>
@@ -25,7 +44,7 @@ function show (data) {
             </h4>
             <div>
                 <h2>Comments</h2>
-                <p>No comments yet!</p>
+                {comments}
             </div>
             <a href={`/places/${data.id}/edit`} className="btn btn-warning"> 
                 Edit
@@ -34,6 +53,27 @@ function show (data) {
             <button type="submit" className="btn btn-danger">
             Delete
             </button>
+            </form>
+            <form method="POST" action={`/places/${data.id}/comment`}>
+              <div className="form-group">
+                <label htmlFor="author">Author</label>
+                <input className="form-control" id="author" name="author" required/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="content">Content</label>
+                <textarea className="form-group" id="content" name="content" rows="4" cols="5"/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="stars">Star Rating</label>
+                <input className="form-control" id="stars" name="stars" type="number" step=".5"/>
+              </div>
+              <div className="form-group">
+                <label htmlFor="rant">Rant</label>
+                <input className="form-control" id="rant" name="rant" type="checkbox"/>
+              </div>
+              <button type="submit" className="btn btn-danger">
+                Submit
+              </button>
             </form>
           </main>
         </Def>
